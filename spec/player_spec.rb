@@ -20,12 +20,12 @@ module Codebreaker
       end
     end
 
-    context 'Code-breaker #submits guess' do
+    context 'player #submits guess' do
       before do
         player.submits_guess
       end
 
-      it 'saves 4 number from player' do
+      it 'should not to be empty' do
         expect(player.instance_variable_get(:@player_code)).not_to be_empty
       end
 
@@ -33,12 +33,12 @@ module Codebreaker
         expect(player.instance_variable_get(:@player_code)).to have(4).items
       end     
 
-      it 'saves "hint" in player code' do 
+      it 'saves "hint"' do 
         player.player_code = 'hint'
         expect(player.instance_variable_get(:@player_code)).to eq("hint")
       end
-
-
+      it 'does if types number'
+      it 'does if types "hint"'
     end
   end
 end
