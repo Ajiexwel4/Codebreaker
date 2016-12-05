@@ -11,6 +11,7 @@ module Codebreaker
     end
 
     private
+
     def check_win
       if win?
         puts 'Congratulation! You win!'
@@ -18,7 +19,7 @@ module Codebreaker
         puts "Game over! Secret code is #{@secret_code}."
         @hint = 0
       else
-        puts '+' * pluses + minuses
+        puts (pluses + minuses).join
         @attempts -= 1
         start
       end
@@ -29,11 +30,11 @@ module Codebreaker
     end
 
     def pluses
-      array_player_code.map.with_index { |num, index| '+' if num == @secret_code[index] }.compact!.size
+      array_player_code.map.with_index { |num, index| '+' if num == @secret_code[index] }.compact
     end
 
     def minuses
-      array_player_code.uniq.map { |num| '-' if @secret_code.include?(num) }.drop(pluses).join
+      array_player_code.map { |num| '-' if @secret_code.include?(num) }.drop(pluses.size)
     end
 
     def win?
