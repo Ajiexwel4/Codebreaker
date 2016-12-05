@@ -1,44 +1,70 @@
 module Codebreaker
-  RSpec.describe Player do
-    let(:player) { Player.new }
-    context 'player #initialize' do
+  describe Player do
+    subject(:player) { described_class.new }
 
-      it 'saves a player name' do
-        expect(player.instance_variable_get(:@name)).not_to be_empty
+    before do
+      expect { player }.to output('Please, enter your name: ').to_stdout
+      allow_any_instance_of(Player).to receive(:name).and_return('Player')
+    end
+
+    context 'attributes #initialize' do
+      it 'saves player name as String' do
+        expect(player.instance_variable_get(:@name).class).to be(String)
       end
 
-      it 'saves attempt' do
-        expect(player.instance_variable_get(:@attempt).class).to be(Fixnum)        
+      it 'reads input player name' do
+        expect(player.name).to be == 'Player'
       end
 
-      it 'saves variables attempt from 5 to 0' do
-        expect(player.instance_variable_get(:@attempt)).to be_between(0, 5).inclusive
+      it 'saves player code as String' do
+        expect(player.instance_variable_get(:@player_code).class).to be(String)
       end
 
-      it 'saves a player name' do
-        expect(player.instance_variable_get(:@player_code)).to be_empty
+      it 'writes player_code' do
+        player.player_code = "1234"
+        expect(player.player_code).to eq('1234')
+      end
+
+      it 'saves score as Fixnum' do
+        expect(player.instance_variable_get(:@score).class).to be(Fixnum)
       end
     end
 
-    context 'player #submits guess' do
+    context '#guess' do
       before do
-        player.submits_guess
+        allow(player).to receive_message_chain(:gets, :chomp) { '1234' }
+        allow(player).to receive(:print).with('Type your secret code or "hint": ')
+        player.guess
+      end
+
+      it 'sets player code' do
+        expect(player.instance_variable_get(:@player_code)).to eq('1234')
       end
 
       it 'should not to be empty' do
         expect(player.instance_variable_get(:@player_code)).not_to be_empty
       end
 
-      it 'saves 4 numbers player code' do      
-        expect(player.instance_variable_get(:@player_code)).to have(4).items
-      end     
-
-      it 'saves "hint"' do 
-        player.player_code = 'hint'
-        expect(player.instance_variable_get(:@player_code)).to eq("hint")
+      it 'saves 4 numbers player code' do
+        expect(player.instance_variable_get(:@player_code)).to have_exactly(4).items
       end
-      it 'does if types number'
-      it 'does if types "hint"'
+    end
+
+    context '#agree?' do
+      it 'matches player input with agreement keyword' do
+        allow(player).to receive_message_chain(:gets, :chomp) { 'y' or 'yes' }
+        expect(player.agree?).to be true
+      end
+
+      it 'matches player input with wrong agreement keyword' do
+        allow(player).to receive_message_chain(:gets, :chomp) { 'n' }
+        expect(player.agree?).to be false
+      end
+
+      it 'matches empty player input with agreement keyword' do
+        allow(player).to receive_message_chain(:gets, :chomp)
+        expect(player.agree?).to be false
+      end
     end
   end
 end

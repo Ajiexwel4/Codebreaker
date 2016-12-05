@@ -1,4 +1,4 @@
-# require_relative '../lib/codebreaker'
+require_relative '../lib/codebreaker'
 require 'rspec/collection_matchers'
 require 'bundler/setup'
 require 'codebreaker'
