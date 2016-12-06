@@ -13,13 +13,13 @@ module Codebreaker
     end
 
     def agree?
-      input =~ /^yes|y/i ? true : false
+      input =~ /^(yes|y)$/i ? true : false
     end
 
     private
 
     def input
-      gets.chomp
+      STDIN.gets.chomp
     end
 
     def input_name
