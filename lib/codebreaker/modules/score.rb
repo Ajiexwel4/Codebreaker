@@ -15,7 +15,8 @@ module Codebreaker
     private
 
     def save_score_file
-      File.open("lib/codebreaker/score/#{@player.name}_score.txt", 'a') do |file|
+      path = File.expand_path("../../score/#{@player.name}_score.txt", __FILE__)
+      File.open(path, 'a') do |file|
         file.puts "#{@player.score} - #{Time.now.asctime}"
       end
     end
