@@ -13,6 +13,7 @@ module Codebreaker
     end
 
     private
+
     def save_score_file
       File.open("lib/codebreaker/score/#{@player.name}_score.txt", 'a') do |file|
         file.puts "#{@player.score} - #{Time.now.asctime}"
