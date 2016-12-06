@@ -55,13 +55,13 @@ You should type 4 numbers in code or "hint"!!!
 
 $ 6666
 
-+---
++
 
 You have 7 attempts and 0 hint.
 
 Type your secret code or "hint": $ 3333
 
-+---
++
 
 
 ...
