@@ -1,19 +1,21 @@
 module Codebreaker
   describe Player do
-    subject(:player) { described_class.new }
+    subject(:player) { Player.new }
+    let(:name) { player.name = 'Player'}
 
     before do
       expect { player }.to output('Please, enter your name: ').to_stdout
-      allow_any_instance_of(Player).to receive(:name).and_return('Player')
+      allow(player).to receive(:puts)
     end
 
     context 'attributes #initialize' do
+
       it 'saves player name as String' do
         expect(player.instance_variable_get(:@name).class).to be(String)
       end
 
       it 'reads input player name' do
-        expect(player.name).to be == 'Player'
+        expect(name).to be == 'Player'
       end
 
       it 'saves player code as String' do
@@ -33,7 +35,6 @@ module Codebreaker
     context '#guess' do
       before do
         allow(player).to receive_message_chain(:gets, :chomp) { '1234' }
-        allow(player).to receive(:print).with('Type your secret code or "hint": ')
         player.guess
       end
 

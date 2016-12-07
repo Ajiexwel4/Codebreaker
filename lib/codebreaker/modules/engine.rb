@@ -35,8 +35,8 @@ module Codebreaker
 
     def minuses
       secret_code = @secret_code.chars.to_a
-      array_player_code.map{ |num| secret_code[secret_code.find_index(num)] = "-" if secret_code.include?(num)}
-      secret_code.select{ |num| num == "-" }.drop(pluses.size)
+      array_player_code.map { |num| secret_code[secret_code.find_index(num)] = '-' if secret_code.include?(num) }
+      secret_code.select { |num| num == '-' }.drop(pluses.size)
     end
 
     def win?

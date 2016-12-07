@@ -19,7 +19,7 @@ module Codebreaker
     private
 
     def input
-      STDIN.gets.chomp
+      gets.chomp
     end
 
     def input_name
