@@ -1,22 +1,16 @@
 module Codebreaker
   module Score
-    def score
-      @player.score += 250 if win?
-      @player.score += @hint * 100 + @attempts * 50
-      puts "#{player.name}, your score: #{@player.score}!"
-    end
-
-    def save_score?
+    def save_score
       puts 'Do you want to save your score in score file?(y/n)'
-      save_score_file if @player.agree?
+      save_score_file if agree?
       exit
     end
 
     private
-
     def save_score_file
-      path = File.expand_path("../../score/#{@player.name}_score.txt", __FILE__)
-      File.open(path, 'a') { |file| file.puts "#{@player.score} - #{Time.now.asctime}" }
+      name = input_name
+      path = File.expand_path("../../score/#{name}_score.txt", __FILE__)
+      File.open(path, 'a') { |file| file.puts "#{@game.score} - #{Time.now.asctime}" }
       puts "You score saved in file: #{path}"
     end
   end

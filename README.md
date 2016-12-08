@@ -28,12 +28,9 @@ Or install it yourself as:
     $ gem install codebreaker
 
 ## Usage
-
-	$ ruby lib/codebreaker.rb
-	or
-	install gem Codebreaker_RG2016 from rubygems.org and from irb type: 
+ 
 	$ require 'codebreaker'
-
+	
 	
 It looks like:
 	
