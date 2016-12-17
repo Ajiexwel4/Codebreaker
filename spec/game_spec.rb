@@ -1,25 +1,16 @@
 module Codebreaker
   describe Game do
-    context "sets subject constants" do
-      it "contains constant with 7 attempts" do
-        expect(Codebreaker::Game::ATTEMPTS).to eq(7)
+    context 'sets subject constants' do
+      it 'contains constant with 7 attempts' do
+        expect(Codebreaker::Game::ATTEMPTS).to eq(6)
       end
 
-      it "contains constant with 1 hint" do
+      it 'contains constant with 1 hint' do
         expect(Codebreaker::Game::HINT).to eq(1)
-      end
-
-      it "contains constant with 4 numbers of secret code" do
-        expect(Codebreaker::Game::CODE_SIZE).to eq(4)
-      end
-
-      it "contains constant with numbers range from 1 to 6" do
-        expect(Codebreaker::Game::RANGE).to eq(1..6)
       end
     end
 
     context 'subject attributes #initialize' do
-
       it 'saves secret code' do
         expect(subject.instance_variable_get(:@secret_code)).not_to be_empty
       end
@@ -34,11 +25,6 @@ module Codebreaker
 
       it 'saves player code as String' do
         expect(subject.instance_variable_get(:@player_code).class).to be(String)
-      end
-
-      it 'writes player code' do
-        subject.player_code = "1234"
-        expect(subject.player_code).to eq('1234')
       end
 
       it 'saves score and it not to be nil' do
@@ -59,157 +45,148 @@ module Codebreaker
     end
 
     context '#check_guess' do
+      let(:check_win)  { subject.check_guess('1234') }
+      let(:check_lose) { subject.check_guess('1111') }
+      let(:check_hint) { subject.check_guess('hint') }
+
       before do
-        subject.instance_variable_set(:@secret_code,"1234")
+        subject.instance_variable_set(:@secret_code, '1234')
       end
 
-      it 'returns win message' do
-        subject.instance_variable_set(:@player_code,"1234")
-        expect(@secret_code).to eq(@player_code)
-      end
+      context 'if player type "hint"' do
+        before do
+          allow(subject).to receive(:puts)
+        end
 
-      it 'returns "subject over" and hint should be 0' do
-        subject.instance_variable_set = 0
-        expect(subject.hint).to be_zero
-        expect { subject }.to output("Game over! Secret code is #{@secret_code}.").to_output
-      end
+        it 'adds 1 attempt compensation for try' do
+          expect { check_hint }.to change { subject.attempts }.by(0)
+        end
 
-      it 'returns nothing to output' do
-        ["5555","5656","6666","5566","6565","6655","5665"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('').to_stdout
+        it 'reduce attempts number by 1' do
+          expect { check_hint }.to change { subject.hint }.by(-1)
         end
       end
 
-      it 'returns "+"' do
-        ["1555","1666","1556","1111","2222","3333","4444"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('+').to_stdout
+      context 'if win' do
+        it 'matches secret code and guess to equal' do
+          check_win
+          expect(@secret_code).to eq(@player_code)
+        end
+
+        it 'returns win message' do
+          expect(check_win).to eq('Congratulation! You win!')
         end
       end
 
-      it 'returns "++"' do
-        ["1255","1266","1256","1211","2232","3334","1444"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('++').to_stdout
+      context 'if lose' do
+        before do
+          subject.instance_variable_set(:@attempts, 0)
+          check_lose
+        end
+
+        it 'sets hint to 0' do
+          expect(subject.hint).to be_zero
+        end
+
+        it 'sets game_start flag to false' do
+          expect(subject.game_start).to be_falsey
+        end
+
+        it 'returns game over message' do
+          expect(check_lose).to eq('Game over! Secret code is 1234.')
         end
       end
 
-      it 'returns "+++"' do
-        ["1235","1264","1236","1634","5234","1634","1444"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('+++').to_stdout
-        end
-      end
-
-      it 'returns "++-"' do
-        ["1245","1524","5231","6134","1624","1264","1246"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('++-').to_stdout
-        end
-      end
-
-      it 'returns "++--"' do
-        ["2134","1243","1324","1432"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('++--').to_stdout
-        end
-      end
-
-      it 'returns "+---"' do
-        ["1423","4213","2431","2314"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('+---').to_stdout
-        end
-      end
-
-      it 'returns "----"' do
-        ["3142","2143","4123","3412"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('---').to_stdout
-        end
-      end
-
-      it 'returns "---"' do
-        ["5342","6423","3541","3642","4152","4326"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('---').to_stdout
-        end
-      end
-
-      it 'returns "--"' do
-        ["5125","3662","3561","3652","4652","4526"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('--').to_stdout
-        end
-      end
-
-      it 'returns "-"' do
-        ["5111","5511","5551","6222","6622","6662"].each do |player_input|
-          let(:player_code) { player_input }
-          expect { subject }.to output('-').to_stdout
-        end
-      end
-
-      context 'secret code has same numbers' do
-        let(:secret_code) { "1122" }
-
-        it 'returns "----"' do
-          let(:player_code) { "2211" }
-          expect { subject }.to output('----').to_stdout
+      context 'cheking comparison in else branch' do
+        it 'reduce attempts number by 1' do
+          expect { check_lose }.to change { subject.attempts }.by(-1)
         end
 
-        it 'returns "---"' do
-          let(:player_code) { "2213" }
-          expect { subject }.to output('----').to_stdout
-        end
+        [
+          ['3331', '3332', '+++' ],
+          ['1113', '1112', '+++' ],
+          ['1312', '1212', '+++' ],
+          ['1234', '1235', '+++' ],
 
-        it 'returns "+--"' do
-          let(:player_code) { "2212" }
-          expect { subject }.to output('+--').to_stdout
+          ['1234', '1266', '++'  ],
+          ['1122', '1325', '++'  ],
+          ['1234', '6634', '++'  ],
+          ['1234', '1654', '++'  ],
+
+          ['1243', '1234', '++--'],
+          ['1532', '5132', '++--'],
+          ['1234', '1324', '++--'],
+          ['1234', '1243', '++--'],
+
+          ['1234', '1245', '++-' ],
+          ['1234', '1524', '++-' ],
+          ['1234', '5231', '++-' ],
+          ['1234', '6134', '++-' ],
+
+          ['1234', '1423', '+---'],
+          ['1234', '4213', '+---'],
+          ['1234', '2431', '+---'],
+          ['1234', '2314', '+---'],
+
+          ['2112', '1222', '+--' ],
+          ['2345', '4542', '+--' ],
+          ['3444', '4334', '+--' ],
+          ['2245', '4125', '+--' ],
+
+          ['5451', '4445', '+-'  ],
+          ['1234', '5212', '+-'  ],
+          ['1234', '1112', '+-'  ],
+          ['1122', '1233', '+-'  ],
+
+          ['1234', '1555', '+'   ],
+          ['1234', '1111', '+'   ],
+          ['4111', '4444', '+'   ],
+          ['1113', '2155', '+'   ],
+
+          ['5556', '1115', '-'   ],
+          ['1234', '6653', '-'   ],
+          ['1234', '5551', '-'   ],
+          ['1234', '5511', '-'   ],
+
+          ['1244', '4156', '--'  ],
+          ['1221', '2332', '--'  ],
+          ['3331', '1253', '--'  ],
+          ['2244', '4526', '--'  ],
+
+          ['5432', '2541', '---' ],
+          ['1145', '6514', '---' ],
+          ['4611', '1466', '---' ],
+          ['1234', '6423', '---' ],
+
+          ['1234', '4321', '----'],
+          ['5432', '2345', '----'],
+          ['1234', '2143', '----'],
+          ['1221', '2112', '----'],
+
+          ['1234', '5555', ''    ],
+          ['1234', '5656', ''    ],
+          ['1234', '6655', ''    ],
+          ['1234', '5665', ''    ]
+        ].each do |check|
+          it "returns #{check[2]} if code #{check[0]} and guess #{check[1]}" do
+            subject.instance_variable_set(:@secret_code, check[0])
+            expect(subject.check_guess(check[1])).to eq(check[2])
+          end
         end
       end
     end
 
-      context '#score' do
-        before { allow(subject).to receive(:check_guess) }
-        after  { allow(subject).to receive (:new_subject?)  }
-
-        it 'calculates score if win' do
-          player.score += 250
-          expect(player.score).to be(250)
-        end
-
-        it 'calculates score' do
-          player.score += subject.hint * 100 + subject.attempts * 50
-          expect(player.score).to be(450)
-        end
-
-        it 'calculates score if lose' do
-          expect(player.score).to be(0)
-        end
-
-        context '#save_score?' do
-          it 'saves score if player agree' do
-            allow(subject).to receive(:puts)
-            save_score_file if player.agree?
-            exit
-          end
-        end
+    context '#score_count' do
+      it 'counts scores if win' do
+        subject.instance_variable_set(:@secret_code, '1234')
+        subject.instance_variable_set(:@player_code, '1234')
+        expect(subject.score_count).to be(650)
       end
 
-      context '#new_subject?' do
-        before do
-          allow(subject).to receive(:puts)
-          let(:agree) { player.agree? = true }
-        end
-        it 'starts new subject if player agree' do
-          expect{ subject.start } if agree
-        end
-
-        it 'ask player to save score' do
-          expect{subject}.to receive(:save_score?) if !agree
-        end
+      it 'counts scores if lose' do
+        subject.instance_variable_set(:@attempts, 0)
+        subject.instance_variable_set(:@hint, 0)
+        expect(subject.score_count).to be(0)
       end
     end
   end

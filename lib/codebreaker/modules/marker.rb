@@ -14,12 +14,12 @@ module Codebreaker
     end
 
     def pluses
-      @player_code.chars.to_a.map.with_index { |num, index| '+' if num == @secret_code[index] }.compact.size
+      @player_code.to_s.chars.to_a.map.with_index { |num, index| '+' if num == @secret_code[index] }.compact.size
     end
 
     def minuses
       secret_code = @secret_code.chars.to_a
-      @player_code.chars.to_a.map { |num| secret_code[secret_code.find_index(num)] = '-' if secret_code.include?(num) }.count('-')
+      @player_code.to_s.chars.to_a.map { |num| secret_code[secret_code.find_index(num)] = '-' if secret_code.include?(num) }.count('-')
     end
 
     def win?
