@@ -4,26 +4,25 @@ module Codebreaker
   class Game
     include Marker
 
-    ATTEMPTS  = 7
+    ATTEMPTS  = 6
     HINT      = 1
-    CODE_SIZE = 4
-    RANGE     = 1..6
 
-    attr_accessor :secret_code, :player_code, :hint, :attempts, :score
+    attr_reader :secret_code, :hint, :attempts, :score, :game_start
     def initialize(score = 0)
-      @secret_code = Array.new(CODE_SIZE) { rand(RANGE) }.join
+      @secret_code = Array.new(4) { rand(1..6) }.join
       @player_code = ''
       @hint        = HINT
       @attempts    = ATTEMPTS
       @score       = score
+      @game_start  = true
     end
 
     def check_guess(guess)
       @player_code = guess
       if @player_code == 'hint' && @hint.nonzero?
-        puts 'Hint: Secret code contains: ' + @secret_code[rand(0..3)]
-        @hint -= 1
         @attempts += 1
+        @hint -= 1
+        puts "Hint: Secret code contains: #{@secret_code[rand(0..3)]}"
       end
       check_win
     end

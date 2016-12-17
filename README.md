@@ -30,13 +30,13 @@ Or install it yourself as:
 ## Usage
  
 	$ require 'codebreaker'
+
+	$ Codebreaker::ConsoleGame.new.play
 	
 	
 It looks like:
 	
 You should to break a secret code ****.
-
-Please, enter your name: $ Alex
 
 You have 7 attempts and 1 hint.
 
@@ -93,6 +93,8 @@ $ n
 Do you want to save your score in score file?(y/n)
 
 $ y
+
+Please, enter your name: $ Alex
 
 You score saved in file: [path]/score/Alex_score.txt
 

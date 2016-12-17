@@ -2,13 +2,14 @@ module Codebreaker
   module Marker
     def check_win
       if win?
-        puts 'Congratulation! You win!'
-      elsif @attempts == 0
-        puts "Game over! Secret code is #{@secret_code}."
+        'Congratulation! You win!'
+      elsif @attempts.zero?
         @hint = 0
+        @game_start = false
+        "Game over! Secret code is #{@secret_code}."
       else
-        puts "+"*pluses + '-'*(minuses-pluses)
         @attempts -= 1
+        '+' * pluses + '-' * (minuses - pluses)
       end
     end
 
@@ -18,7 +19,7 @@ module Codebreaker
 
     def minuses
       secret_code = @secret_code.chars.to_a
-      @player_code.chars.to_a.map{ |num| secret_code[secret_code.find_index(num)] = '-' if secret_code.include?(num) }.count('-')
+      @player_code.chars.to_a.map { |num| secret_code[secret_code.find_index(num)] = '-' if secret_code.include?(num) }.count('-')
     end
 
     def win?

@@ -12,23 +12,11 @@ module Codebreaker
 
     def play
       puts 'You should to break a secret code ****.'
-      checking
+      puts @game.check_guess(input_code) until @game.win? || @game.game_start == false
       @game.score_count
       puts "Your score: #{@game.score}!"
       puts 'Do you want to start new game?(y/n)'
       new_game ? play : save_score
-    end
-
-    private
-    def checking
-      until @game.win?
-        @game.check_guess(input_code)
-        return @game.check_win if @game.attempts.zero?
-      end
-    end
-
-    def new_game
-      @game = Game.new(@game.score) if agree?
     end
   end
 end
