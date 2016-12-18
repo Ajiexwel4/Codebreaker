@@ -8,22 +8,33 @@ module Codebreaker
         @game_start = false
         "Game over! Secret code is #{@secret_code}."
       else
-        @attempts -= 1
-        '+' * pluses + '-' * (minuses - pluses)
+        marking
       end
     end
 
+    def marking
+      @player_code = convert_to_a(@player_code)
+      @attempts -= 1
+      '+' * pluses + '-' * (minuses - pluses)
+    end
+
     def pluses
-      @player_code.to_s.chars.to_a.map.with_index { |num, index| '+' if num == @secret_code[index] }.compact.size
+      @player_code.zip(@secret_code.chars).map {|array| '+' if array[0] == array[1]}.count('+')
     end
 
     def minuses
-      secret_code = @secret_code.chars.to_a
-      @player_code.to_s.chars.to_a.map { |num| secret_code[secret_code.find_index(num)] = '-' if secret_code.include?(num) }.count('-')
+      secret = convert_to_a(@secret_code)
+      @player_code.map { |num| secret[secret.find_index(num)] = '-' if secret.include?(num) }.count('-')
     end
 
     def win?
       @secret_code == @player_code
+    end
+
+    private
+
+    def convert_to_a(code)
+      code.chars.to_a
     end
   end
 end
