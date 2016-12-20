@@ -34,7 +34,7 @@ module Codebreaker
     end
 
     def convert_to_a(code)
-      code.chars.to_a
+      code.to_s.chars.to_a
     end
   end
 end

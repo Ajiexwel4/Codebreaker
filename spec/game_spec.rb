@@ -2,7 +2,7 @@ module Codebreaker
   describe Game do
     context 'sets subject constants' do
       it 'contains constant with 7 attempts' do
-        expect(Codebreaker::Game::ATTEMPTS).to eq(6)
+        expect(Codebreaker::Game::ATTEMPTS).to eq(10)
       end
 
       it 'contains constant with 1 hint' do
@@ -180,7 +180,7 @@ module Codebreaker
       it 'counts scores if win' do
         subject.instance_variable_set(:@secret_code, '1234')
         subject.instance_variable_set(:@player_code, '1234')
-        expect(subject.score_count).to be(650)
+        expect(subject.score_count).to be(850)
       end
 
       it 'counts scores if lose' do

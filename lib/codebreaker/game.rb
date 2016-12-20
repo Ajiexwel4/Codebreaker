@@ -4,7 +4,7 @@ module Codebreaker
   class Game
     include Marker
 
-    ATTEMPTS  = 6
+    ATTEMPTS  = 10
     HINT      = 1
 
     attr_reader :secret_code, :hint, :attempts, :score, :game_start

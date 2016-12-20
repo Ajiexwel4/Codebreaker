@@ -1,3 +1,5 @@
+require_relative 'game_spec.rb'
+
 module Codebreaker
   describe ConsoleGame do
     let(:game) { Codebreaker::Game.new }
