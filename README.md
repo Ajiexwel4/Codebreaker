@@ -1,4 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/Codebreaker_RG2016.svg)](https://badge.fury.io/rb/Codebreaker_RG2016)
+[![CircleCI](https://circleci.com/gh/Ajiexwel4/Codebreaker/tree/master.svg?style=svg)](https://circleci.com/gh/Ajiexwel4/Codebreaker/tree/master)
 
 # Codebreaker
 
